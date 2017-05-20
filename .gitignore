@@ -10,7 +10,7 @@
 *.class
 
 #Idea
-.idea/
+.idea/*
 
 # Generated files
 bin/
