@@ -28,5 +28,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     annotationProcessor "org.androidannotations:androidannotations:4.3.0"
     compile "org.androidannotations:androidannotations-api:4.3.0"
+    compile "io.github.openfeign:feign-core:9.5.0"
+    compile "com.fasterxml.jackson.core:jackson-core:2.8.8"
+    compile "com.fasterxml.jackson.core:jackson-annotations:2.8.8"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.8.8.1"
 
 }
