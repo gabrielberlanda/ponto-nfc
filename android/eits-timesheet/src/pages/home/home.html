@@ -1,0 +1,19 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            Ionic Blank
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    Hello World!
+    <p>Ionic > Android Nativo</p>
+
+    <ul>
+        <li class="text" *ngFor="let item of contributors | async">
+            {{item.name}}
+        </li>
+    </ul>
+
+</ion-content>
