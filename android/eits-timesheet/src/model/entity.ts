@@ -1,10 +1,11 @@
+import { Serializable } from './serializable';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as firebase from 'firebase/app';
 
 /**
  * 
  */
-export abstract class Entity 
+export abstract class Entity extends Serializable
 {
     public $key: any;
     public $value: any;
@@ -17,36 +18,37 @@ export abstract class Entity
      * 
      */
     constructor() {
+        super();
         Entity.db = window["angularFireDatabase"];
         Entity.$entityName = this.constructor.name;
     }
     
     /**
-     * 
+     * Path is optional, the default value is the $entityName
      */
-    public insert():firebase.Promise<void> {
-        const entities = Entity.db.list(Entity.$entityName);
+    public insert( path = Entity.$entityName ):firebase.Promise<void> {
+        const entities = Entity.db.list( path );
         return entities.push(this);
     }
     
     /**
-     * 
+     * Path is optional, the default value is the $entityName
      */
-    public update():firebase.Promise<void> {
-        const entities = Entity.db.list(Entity.$entityName);
+    public update( path = Entity.$entityName  ):firebase.Promise<void> {
+        const entities = Entity.db.list( path );
         return entities.update(this.$key, this);
     }
     
     /**
-     * 
+     * Path is optional, the default value is the $entityName
      */
-    public remove():firebase.Promise<void> {
-        const entities = Entity.db.list(Entity.$entityName);
+    public remove( path = Entity.$entityName ):firebase.Promise<void> {
+        const entities = Entity.db.list( path );
         return entities.remove(this.$key);
     }
     
     /**
-     * 
+     * Path is optional, the default value is the $entityName
      */
     public static list( query:{[key: string]: any;
                             orderByKey?: boolean,
@@ -58,11 +60,11 @@ export abstract class Entity
                             endAt?: any,
                             limitToFirst?: number,
                             limitToLast?: number
-                         } ):FirebaseListObservable<any[]> {
+                         }, path = this.name ):FirebaseListObservable<any[]> {
 
         if ( !Entity.db ) Entity.db = window["angularFireDatabase"];
         
-        return Entity.db.list(this.name, query);
+        return Entity.db.list(path, query);
     }
 
 }

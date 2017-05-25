@@ -8,10 +8,14 @@ export class TimeRecord extends Entity {
     /**
      * 
      */
-    public time: Date;
+    public date: number;
 
     /**
      * 
      */
-    public contributorKey: string;
+    constructor( date : number ) 
+    {
+        super();
+        this.date = date;
+    }
 }

@@ -1,3 +1,5 @@
+import { TimeRecord } from './../../model/time-record';
+import { Collaborator } from './../../model/collaborator';
 import { Component } from '@angular/core';
 import { NavController, Platform, ToastController, AlertController } from 'ionic-angular';
 import { Ndef, NFC } from '@ionic-native/nfc';
@@ -59,7 +61,6 @@ export class HomePage {
                 });
                 alert.present();
             });
-
      }
 
     /**
@@ -85,12 +86,29 @@ export class HomePage {
      */
     private onNewTagDiscovered( tag: any ): void
     {
-        const tagId = this.nfc.bytesToHexString( tag.id );
+        const tagCode = this.nfc.bytesToHexString( tag.id );
 
-        this.toastCtrl.create({
-            message: 'O id da tag é: ' + tagId,
-            duration: 3000
-        }).present();
+        Collaborator.findByTagCode( tagCode )
+            .then( ( collaborator ) => {
+                const timeRecord: TimeRecord = new TimeRecord( new Date().getTime() ) ;
+
+                timeRecord.insert("timesheet/" + collaborator.$key + "/")
+                    .then( ( data ) => {
+                        this.toastCtrl.create({
+                            message: 'Olá, '+ collaborator.nickname,
+                            duration: 3000,
+                            closeButtonText: 'Ok'
+                        }).present();
+                    })
+                    .catch( err => console.error( err ) );
+            })
+            .catch( err => {
+                this.toastCtrl.create({ 
+                    message: 'Colaborador não encontrado.',
+                    duration: 3000,
+                    closeButtonText: 'Ok'
+                }).present();
+            });
     }
 
     
