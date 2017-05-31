@@ -7,6 +7,37 @@
 </ion-header>
 
 <ion-content padding>
-    Hello World!
-    <p>Ionic > Android Nativo</p>
+    <div padding>
+        <h1>Olá!</h1>
+        <p>Aproxime seu crachá para registrar seu horário.</p>
+        <div class="flex-col">
+            <img class="align-center" src="assets/images/nfc-icon.png">
+        </div>
+    </div>
+
 </ion-content>
+
+<ion-footer>
+    <ion-toolbar>
+        <ion-grid>
+            <ion-row >
+                <ion-col class="align-center">
+                    <button *ngIf="!nfcOn" (click)="checkNfc()" ion-button small [clear]="true">
+                        <ion-icon name="refresh"></ion-icon>
+                    </button>
+                    <span>
+                        NFC 
+                        <ion-icon name="{{ nfcOn ? 'checkmark' : 'close' }}" color="{{ nfcOn ? 'secondary' : 'danger' }}"></ion-icon>
+                    </span>
+                </ion-col>
+                <ion-col></ion-col>
+                <ion-col class="align-center">
+                    <span>
+                        INTERNET
+                        <ion-icon name="{{ networkOn ? 'checkmark' : 'close' }}" color="{{ networkOn ? 'secondary' : 'danger' }}"></ion-icon>   
+                    </span>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-toolbar>
+</ion-footer>

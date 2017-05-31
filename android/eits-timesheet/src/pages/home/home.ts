@@ -1,8 +1,11 @@
+import { Network } from '@ionic-native/network';
 import { TimeRecord } from './../../model/time-record';
 import { Collaborator } from './../../model/collaborator';
 import { Component } from '@angular/core';
 import { NavController, Platform, ToastController, AlertController } from 'ionic-angular';
 import { Ndef, NFC } from '@ionic-native/nfc';
+import { TextToSpeech } from '@ionic-native/text-to-speech';
+import { DatePipe } from '@angular/common';
 
 import { AngularFireDatabase } from 'angularfire2/database';
 
@@ -11,6 +14,10 @@ import { AngularFireDatabase } from 'angularfire2/database';
     templateUrl: 'home.html'
 })
 export class HomePage {
+
+    public nfcOn: boolean = false;
+    public networkOn: boolean = true;
+    public networkType: string = '';
 
     /**
      * 
@@ -22,29 +29,57 @@ export class HomePage {
         private ndef: Ndef,
         private platform: Platform,
         private toastCtrl: ToastController,
-        private alertCtrl: AlertController
+        private alertCtrl: AlertController,
+        private tts: TextToSpeech,
+        private network: Network
     ) 
     {
         this.platform.ready()
             .then( () => {
                 this.checkNfc();
-            })
+            });
+
+
+        //  Evento de disconexão da internet
+        let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
+            this.networkOn = false;
+            console.log( 'desconectado' );
+        });
+
+        // watch network for a connection
+        let connectSubscription = this.network.onConnect().subscribe(() => {
+            
+            this.networkOn = true;
+
+            setTimeout(() => {
+
+                if ( this.network.type === 'wifi' || 
+                    this.network.type === '3g' || 
+                    this.network.type === 'ethernet' || 
+                    this.network.type === '4g')
+                {
+                    this.networkType = this.network.type;
+                    console.log( 'tipo: ', this.network.type );
+                    console.log( 'net:', this.networkOn );
+                }
+            }, 3000);
+        });
     }
 
     /**
      * 
      */
-     private checkNfc():void 
+     public checkNfc():void 
      {
         this.nfc.enabled()
             .then( () => {
+                this.nfcOn = true;
+                console.log( "status do nfc:", this.nfcOn )
                 this.addNFCListeners();
-                this.toastCtrl.create({
-                    message: 'Listener de NFC adicionado.',
-                    duration: 3000
-                }).present();
             })
             .catch( err => {
+                this.nfcOn = false;
+                console.log( "status do nfc:", this.nfcOn )
                 const alert = this.alertCtrl.create({
                     title: 'NFC desligado',
                     subTitle: 'Verifique o status do seu leitor de NFC',
@@ -75,7 +110,6 @@ export class HomePage {
             //Tag lida.
             if ( nfcRead && nfcRead.tag )
             {
-                console.log( 'Tag lida: ', nfcRead );
                 this.onNewTagDiscovered( nfcRead.tag );
             }
         })
@@ -90,17 +124,27 @@ export class HomePage {
 
         Collaborator.findByTagCode( tagCode )
             .then( ( collaborator ) => {
-                const timeRecord: TimeRecord = new TimeRecord( new Date().getTime() ) ;
+                const now: Date = new Date();
+                const timeRecord: TimeRecord = new TimeRecord( now.getTime() ) ;
 
                 timeRecord.insert("timesheet/" + collaborator.$key + "/")
                     .then( ( data ) => {
-                        this.toastCtrl.create({
-                            message: 'Olá, '+ collaborator.nickname,
-                            duration: 3000,
-                            closeButtonText: 'Ok'
+                        const datePipe = new DatePipe( 'pt-BR' );
+
+                        let timeRecordSuccessAlert = this.alertCtrl.create({
+                            title: 'Horário Registrado!',
+                            message: 'Colaborador: ' + collaborator.name + '\n Horário: ' + datePipe.transform( now, 'jms') ,
+                            buttons: ['É nois']
                         }).present();
+
+                        this.tts.speak({
+                            text: 'Olá, ' + collaborator.nickname,
+                            locale: 'pt-BR'
+                        });
+
                     })
                     .catch( err => console.error( err ) );
+                    
             })
             .catch( err => {
                 this.toastCtrl.create({ 
@@ -108,6 +152,10 @@ export class HomePage {
                     duration: 3000,
                     closeButtonText: 'Ok'
                 }).present();
+                this.tts.speak({ 
+                    text: 'Ops, não encontramos ninguém registrado com sua TAG',
+                    locale: 'pt-BR'
+                });
             });
     }
 
