@@ -1,0 +1,14 @@
+<div layout="column" layout-align="center center">
+    <md-card class="mainPanel">
+        <h4 class="md-display-1">Colaboradores</h4>
+
+        <md-list>
+            <md-list-item *ngFor="let collaborator of collaborators" class="mdListCursor" style="overflow: hidden">
+                <h4 md-line>{{collaborator.name}}</h4>
+                <p md-line> {{collaborator.email}} </p>
+            </md-list-item>
+        </md-list>
+    </md-card>
+</div>
+
+<button md-fab class="md-button md-fab md-fab-bottom-right"><md-icon>add</md-icon></button>

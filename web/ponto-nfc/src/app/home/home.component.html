@@ -1,0 +1,32 @@
+<md-sidenav-container>
+    <md-sidenav #sidenav>
+        <md-list>
+            <md-list-item [routerLink]="['timesheet']" (click)="sidenav.close()" class="mdListCursor">
+                <md-icon md-list-icon>home</md-icon>
+                <h4 md-line>Home</h4>
+            </md-list-item>
+
+            <md-list-item [routerLink]="['admin']" (click)="sidenav.close()" *ngIf="isAdminCollaborator()" class="mdListCursor">
+                <md-icon md-list-icon>account_circle</md-icon>
+                <h4 md-line>Administração</h4>
+            </md-list-item>
+
+            <md-list-item (click)="logout()" class="mdListCursor">
+                <md-icon md-list-icon>exit_to_app</md-icon>
+                <h4 md-line>Logout</h4>
+            </md-list-item>
+        </md-list>
+    </md-sidenav>
+
+    <div>
+        <md-toolbar color="primary">
+            <button md-icon-button (click)="sidenav.open()">
+                <md-icon>menu</md-icon>
+            </button>
+
+            <span>Eits Timesheet</span>
+        </md-toolbar>
+
+        <router-outlet></router-outlet>
+    </div>
+</md-sidenav-container>
