@@ -1,0 +1,60 @@
+<div layout="column" layout-align="center center">
+    <md-card class="mainPanel" flex>
+        <div layout="row">
+            <md-card flex="50" class="container">
+                <h4 class="md-display-1">Meus Registros</h4>
+
+                <div layout="column">
+                    <md-select placeholder="Selecione um mês" name="months" [(ngModel)]="selectedMonth" (change)="listRecordsBySelectedMonth()">
+                        <md-option *ngFor="let month of monthsWithRecord" [value]="month">
+                        {{ month.name }} - {{ month.year }}
+                        </md-option>
+                    </md-select>
+                </div>
+
+                <div layout="column">
+                    <div>
+                        <div *ngFor="let dayRecords of monthRecordsByDay">
+                            <td-expansion-panel label="Dia: {{ dayRecords.dia }}">
+                                <div *ngFor="let timeRecord of dayRecords.timeRecords" layout-margin>
+                                    <span flex>{{ timeRecord.date | date:'HH:mm' }}</span>
+                                </div>
+                            </td-expansion-panel>
+                        </div>
+                    </div>
+                </div>
+            </md-card>
+
+            <md-card flex="50" class="container">
+                <h4 class="md-display-1">Meus Dados</h4>
+                <div layout="row">
+                    <span flex>
+                        <label class="tc-grey-500"><small>Nome</small></label>
+                        <p>{{ collaborator?.name }}</p>
+                    </span>
+
+                    <span flex>
+                        <label class="tc-grey-500"><small>Email</small></label>
+                        <p>{{ collaborator?.email }}</p>
+                    </span>
+                </div>
+
+                <div layout="row">
+                    <span flex>
+                        <label class="tc-grey-500"><small>Apelido</small></label>
+                        
+                        <div layout="row">
+                            <p>{{ collaborator?.nickname }}</p>
+                            <button md-icon-button (click)="editNickname()"><md-icon>edit</md-icon></button>
+                        </div>
+                    </span>
+
+                    <span flex>
+                        <label class="tc-grey-500"><small>Tag Code</small></label>
+                        <p>{{ collaborator?.tagCode }}</p>
+                    </span>
+                </div>
+            </md-card>
+        </div>
+    </md-card>
+</div>
