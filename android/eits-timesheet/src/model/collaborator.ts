@@ -13,6 +13,11 @@ export class Collaborator extends Entity {
     /**
      * 
      */
+    public admin:boolean;
+
+    /**
+     * 
+     */
     public tagCode:string;
 
     /**

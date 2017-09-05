@@ -1,3 +1,4 @@
+import { CollaboratorFormPage } from './../pages/collaborator-form/collaborator-form';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -18,11 +19,14 @@ import { environment } from '../environments/environment';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { CollaboratorListPage } from './../pages/collaborator-list/collaborator-list';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    CollaboratorListPage,
+    CollaboratorFormPage
   ],
   imports: [
     BrowserModule,
@@ -33,7 +37,9 @@ import { HomePage } from '../pages/home/home';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    CollaboratorListPage,
+    CollaboratorFormPage
   ],
   providers: [
     StatusBar,

@@ -1,0 +1,21 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>
+            Eits - Colaboradores
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-list inset >
+        <ion-item *ngFor="let collaborator of collaborators | async" >
+            {{ collaborator.name }}
+        </ion-item>
+    </ion-list>
+    <ion-fab right bottom>
+        <button ion-fab (click)="onNewCollaborator()"><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
+</ion-content>

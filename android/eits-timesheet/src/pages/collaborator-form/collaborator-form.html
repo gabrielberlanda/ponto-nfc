@@ -1,0 +1,32 @@
+<ion-header>
+
+    <ion-navbar color="primary">
+        <ion-title>Adicionar Colaborador</ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="close()">
+            <ion-icon name="close"></ion-icon>
+        </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+        <ion-item>
+            <ion-label floating >Nome</ion-label>
+            <ion-input type="text" [(ngModel)]="collaborator.name" ></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label floating >Apelido</ion-label>
+            <ion-input type="text" [(ngModel)]="collaborator.nickname"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label floating >Email</ion-label>
+            <ion-input type="email" [(ngModel)]="collaborator.email"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Administrador</ion-label>
+            <ion-toggle [(ngModel)]="collaborator.administrador" checked="false" ></ion-toggle>
+        </ion-item>
+
+        <button ion-button block>Cadastrar</button>
+</ion-content>

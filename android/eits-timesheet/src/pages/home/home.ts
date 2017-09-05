@@ -18,6 +18,7 @@ export class HomePage {
     public nfcOn: boolean = false;
     public networkOn: boolean = true;
     public networkType: string = '';
+    private addTagListenerSubstribe: any;
 
     /**
      * 
@@ -31,9 +32,16 @@ export class HomePage {
         private toastCtrl: ToastController,
         private alertCtrl: AlertController,
         private tts: TextToSpeech,
-        private network: Network
+        private network: Network,
+        private navController: NavController
     ) 
     {
+
+        this.navController.viewWillLeave.subscribe( () => {
+            if ( this.addTagListenerSubstribe ) this.addTagListenerSubstribe.unsubscribe();
+            console.log( "CAIU AQUI");
+        })
+        
         this.platform.ready()
             .then( () => {
                 this.checkNfc();
@@ -103,7 +111,7 @@ export class HomePage {
      */
     private addNFCListeners():void
     {
-        this.nfc.addTagDiscoveredListener(
+        this.addTagListenerSubstribe = this.nfc.addTagDiscoveredListener(
             ( tagEvent: Event ) => { console.log( 'Evento de NFC adicionado' ) },
             ( tagEvent: Event ) => { console.error( 'Falha ao adicionar o listener de NFC', tagEvent ) } 
         ).subscribe( ( nfcRead ) => {
