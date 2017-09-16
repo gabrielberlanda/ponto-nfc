@@ -1,0 +1,30 @@
+<h3>Cadastrar Colaborador</h3>
+
+<div layout="row" layout-margin>
+    <md-input-container flex>
+        <input mdInput placeholder="Nome" [(ngModel)]="collaborator.name">
+    </md-input-container>
+
+    <md-input-container flex>
+        <input mdInput placeholder="Email" [(ngModel)]="collaborator.email">
+    </md-input-container>
+
+    <md-input-container flex>
+        <input mdInput placeholder="tagCode" [(ngModel)]="collaborator.tagCode">
+    </md-input-container>
+
+</div>
+
+<div layout="row" layout-margin>
+    <div flex>
+        <md-slide-toggle [(ngModel)]="collaborator.admin">Admin</md-slide-toggle>
+    </div>
+
+    <div flex>
+        <md-slide-toggle [(ngModel)]="collaborator.active">Ativo</md-slide-toggle>
+    </div>
+</div>
+<div layout="row" layout-align="end center">
+    <button md-button (click)="close()">Cancelar</button>
+    <button md-button color="primary" (click)="save()">Salvar</button>
+</div>

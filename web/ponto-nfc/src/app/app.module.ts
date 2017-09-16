@@ -4,7 +4,20 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule } from '@angular/http';
 
-import { MdButtonModule, MdIconModule, MdListModule, MdCardModule, MdCoreModule, MdMenuModule, MdSidenavModule, MdSnackBarModule, MdSelectModule, MdToolbarModule } from '@angular/material';
+import { 
+    MdInputModule, 
+    MdButtonModule, 
+    MdIconModule, 
+    MdListModule, 
+    MdCardModule, 
+    MdCoreModule, 
+    MdMenuModule, 
+    MdSidenavModule, 
+    MdSnackBarModule, 
+    MdSelectModule, 
+    MdToolbarModule ,
+    MdSlideToggleModule
+} from '@angular/material';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
@@ -18,6 +31,7 @@ import { AuthComponent } from './auth/auth.component';
 import { HomeComponent } from './home/home.component';
 import { AdminComponent } from './admin/admin.component';
 import { TimesheetComponent } from './timesheet/timesheet.component';
+import { CollaboratorFormPopupComponent } from './admin/collaborator-form-popup/collaborator-form-popup.component';
 
 import { AuthService } from './controls/auth.service';
 
@@ -36,7 +50,8 @@ export const firebaseConfig = {
         AppComponent,
         AuthComponent,
         HomeComponent,
-        TimesheetComponent
+        TimesheetComponent,
+        CollaboratorFormPopupComponent
     ],
     imports: [
         AngularFireModule.initializeApp( firebaseConfig ),
@@ -54,18 +69,23 @@ export const firebaseConfig = {
         MdCardModule,
         MdCoreModule,
         MdIconModule,
+        MdInputModule,
         MdListModule,
         MdMenuModule,
         MdSidenavModule,
         MdSnackBarModule,
         MdSelectModule,
         MdToolbarModule,
+        MdSlideToggleModule,
         RoutingModule
     ],
     providers: [
         appRoutingProviders,
         AuthService
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [
+        CollaboratorFormPopupComponent
+    ]
 } )
 export class AppModule { }
