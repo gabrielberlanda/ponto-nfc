@@ -3,12 +3,15 @@
         <h4 class="md-display-1">Colaboradores</h4>
 
         <md-list>
-            <md-list-item *ngFor="let collaborator of collaborators" class="mdListCursor" style="overflow: hidden">
+            <md-list-item *ngFor="let collaborator of collaborators" (click)="collaboratorTimesheet(collaborator)" class="mdListCursor" style="overflow: hidden">
                 <h4 md-line>{{collaborator.name}}</h4>
                 <p md-line> {{collaborator.email}} </p>
+                <span flex></span>
+                <button md-icon-button (click)="editCollaborator(collaborator); $event.stopPropagation();"><md-icon>edit</md-icon></button>
+                <button md-icon-button *ngIf="collaborator.active" (click)="deactivateCollaborator(collaborator); $event.stopPropagation();"><md-icon>block</md-icon></button>
             </md-list-item>
         </md-list>
     </md-card>
 </div>
 
-<button md-fab class="md-button md-fab md-fab-bottom-right"><md-icon>add</md-icon></button>
+<button md-fab class="md-button md-fab md-fab-bottom-right" (click)="openColaboratorForm()"><md-icon>add</md-icon></button>

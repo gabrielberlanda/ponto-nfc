@@ -52,6 +52,8 @@ export class TimesheetComponent implements OnInit
 
     private collaborator: Collaborator;
 
+    private biggerMonths = [1, 3, 5, 7, 8, 10, 12];
+
     constructor(
         private afAuth: AngularFireAuth,
         private afDatabase: AngularFireDatabase,
@@ -153,13 +155,23 @@ export class TimesheetComponent implements OnInit
             initialDate.setSeconds(0);
 
             let finalDate = new Date();
-            finalDate.setDate(31);
+            
+            if(this.biggerMonths.indexOf(+this.selectedMonth.code + 1) != -1 )
+            {
+                finalDate.setDate(31);
+            }
+            else
+            {
+                finalDate.setDate(30);
+            }
+
+            finalDate.setDate(30);
             finalDate.setMonth(this.selectedMonth.code);
             finalDate.setFullYear(this.selectedMonth.year);
             finalDate.setHours(23);
             finalDate.setMinutes(59);
             finalDate.setSeconds(0);
-
+            
             this.afDatabase.list( this.timesheetTableName +"/"+ this.collaborator.$key, {
                 query: {
                     orderByChild: "date",
