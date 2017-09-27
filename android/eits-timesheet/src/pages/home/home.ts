@@ -36,16 +36,17 @@ export class HomePage {
         private navController: NavController
     ) 
     {
+    }
 
-        this.navController.viewWillLeave.subscribe( () => {
-            if ( this.addTagListenerSubstribe ) this.addTagListenerSubstribe.unsubscribe();
-            console.log( "CAIU AQUI");
-        })
-        
+    /**
+     * 
+     */
+    ionViewDidLoad() 
+    {
         this.platform.ready()
             .then( () => {
                 this.checkNfc();
-            });
+        });
 
 
         //  Evento de disconexão da internet
@@ -72,6 +73,11 @@ export class HomePage {
                 }
             }, 3000);
         });
+    }
+
+    ionViewWillLeave()
+    {
+        if ( this.addTagListenerSubstribe ) this.addTagListenerSubstribe.unsubscribe();
     }
 
     /**

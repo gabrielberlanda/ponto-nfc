@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Vincular NFC</ion-title>
+    <ion-buttons start>
+        <button ion-button (click)="onCancel()" icon-only >
+            <ion-icon name="close"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <div padding>
+        <h1>Olá!</h1>
+        <p>Aproxime o crachá do(a) {{ collaborator.name }} para vincular a tag NFC.</p>
+        <p *ngIf="tagFound"> <ion-icon color="secondary" name="checkmark"></ion-icon> Tag encontrada: {{ tagFound }} </p>
+    </div>
+    <button ion-button block [disabled]="!tagFound" (click)="onUpdateCollaboratorNfc()">Vincular</button>
+</ion-content>

@@ -1,4 +1,4 @@
-import { CollaboratorFormPage } from './../pages/collaborator-form/collaborator-form';
+import { CollaboratorUpdateNfcPage } from './../pages/collaborator-update-nfc/collaborator-update-nfc';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -26,7 +26,7 @@ import { CollaboratorListPage } from './../pages/collaborator-list/collaborator-
     MyApp,
     HomePage,
     CollaboratorListPage,
-    CollaboratorFormPage
+    CollaboratorUpdateNfcPage
   ],
   imports: [
     BrowserModule,
@@ -39,7 +39,7 @@ import { CollaboratorListPage } from './../pages/collaborator-list/collaborator-
     MyApp,
     HomePage,
     CollaboratorListPage,
-    CollaboratorFormPage
+    CollaboratorUpdateNfcPage
   ],
   providers: [
     StatusBar,

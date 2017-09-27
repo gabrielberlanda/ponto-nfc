@@ -11,11 +11,8 @@
 
 <ion-content>
     <ion-list inset >
-        <ion-item *ngFor="let collaborator of collaborators | async" >
+        <ion-item (click)="onUpdateCollaboratorNfc( collaborator )" *ngFor="let collaborator of collaborators | async" >
             {{ collaborator.name }}
         </ion-item>
     </ion-list>
-    <ion-fab right bottom>
-        <button ion-fab (click)="onNewCollaborator()"><ion-icon name="add"></ion-icon></button>
-    </ion-fab>
 </ion-content>
