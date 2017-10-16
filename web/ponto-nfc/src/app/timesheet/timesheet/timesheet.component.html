@@ -1,0 +1,97 @@
+<md-card class="container">
+    <h4 class="md-display-1" *ngIf="admin == false">Meus Registros</h4>
+    <h4 class="md-display-1" *ngIf="admin == true">Registros de: {{ collaborator.name }} </h4>
+
+    <div layout="column">
+        <md-select placeholder="Selecione um mês" name="months" [(ngModel)]="selectedMonth" (change)="listRecordsBySelectedMonth()">
+            <md-option *ngFor="let month of monthsWithRecord" [value]="month">
+            {{ month.name }} - {{ month.year }}
+            </md-option>
+        </md-select>
+    </div>
+
+    <table td-data-table *ngIf="admin == false">
+        <thead>
+            <tr td-data-table-column-row>
+                <td td-data-table-column>
+                    Dia
+                </td>
+                <td td-data-table-column>
+                    Entrada Manhã
+                </td>
+                <td td-data-table-column>
+                    Saída Manhã
+                </td>
+                <td td-data-table-column>
+                    Entrada Tarde
+                </td>
+                <td td-data-table-column>
+                    Saída Tarde
+                </td>
+                <td td-data-table-column>
+                    Entrada Extra
+                </td>
+                <td td-data-table-column>
+                    Saída Extra
+                </td>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let dayRecords of monthRecordsByDay" td-data-table-column-row>
+                <td td-data-table-column>
+                    <span>{{ dayRecords.dia }}</span>
+                </td>
+                <td *ngFor="let timeRecord of dayRecords.timeRecords" layout-margin td-data-table-column>
+                    <span flex>{{ timeRecord.date | date:'HH:mm' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table td-data-table *ngIf="admin == true">
+        <thead>
+            <tr td-data-table-column-row>
+                <td td-data-table-column>
+                    Dia
+                </td>
+                <td td-data-table-column>
+                    Entrada Manhã
+                </td>
+                <td td-data-table-column>
+                    Saída Manhã
+                </td>
+                <td td-data-table-column>
+                    Entrada Tarde
+                </td>
+                <td td-data-table-column>
+                    Saída Tarde
+                </td>
+                <td td-data-table-column>
+                    Entrada Extra
+                </td>
+                <td td-data-table-column>
+                    Saída Extra
+                </td>
+                <td>
+                </td>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let dayRecords of monthRecordsByDay" td-data-table-column-row>
+                <td td-data-table-column>
+                    <span>{{ dayRecords.dia }}</span>
+                </td>
+                <td *ngFor="let timeRecord of dayRecords.timeRecords" layout-margin td-data-table-column>
+                    <div layout="row" flex layout-align="center center">
+                        <md-input-container flex="50">
+                            <input value="{{ timeRecord.date | date:'HH:mm' }}" mdInput #input (change)="saveTimeRecord(timeRecord, input)">
+                        </md-input-container>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</md-card>

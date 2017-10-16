@@ -16,21 +16,29 @@ import {
     MdSnackBarModule, 
     MdSelectModule, 
     MdToolbarModule ,
-    MdSlideToggleModule
+    MdSlideToggleModule,
+    MD_DIALOG_DATA
 } from '@angular/material';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 
-import { CovalentLayoutModule, CovalentMessageModule, CovalentExpansionPanelModule, CovalentDialogsModule } from '@covalent/core';
+import { 
+    CovalentLayoutModule, 
+    CovalentMessageModule, 
+    CovalentExpansionPanelModule, 
+    CovalentDialogsModule,
+    CovalentDataTableModule
+} from '@covalent/core';
 
 import { RoutingModule, appRoutingProviders } from './../routing.module';
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { HomeComponent } from './home/home.component';
 import { AdminComponent } from './admin/admin.component';
-import { TimesheetComponent } from './timesheet/timesheet.component';
+import { UserHomeComponent } from './timesheet/user-home.component';
+import { TimesheetComponent } from './timesheet/timesheet/timesheet.component';
 import { CollaboratorFormPopupComponent } from './admin/collaborator-form-popup/collaborator-form-popup.component';
 
 import { AuthService } from './controls/auth.service';
@@ -50,8 +58,9 @@ export const firebaseConfig = {
         AppComponent,
         AuthComponent,
         HomeComponent,
-        TimesheetComponent,
-        CollaboratorFormPopupComponent
+        UserHomeComponent,
+        CollaboratorFormPopupComponent,
+        TimesheetComponent
     ],
     imports: [
         AngularFireModule.initializeApp( firebaseConfig ),
@@ -59,6 +68,7 @@ export const firebaseConfig = {
         AngularFireAuthModule,
         BrowserModule,
         BrowserAnimationsModule,
+        CovalentDataTableModule,
         CovalentDialogsModule,
         CovalentExpansionPanelModule,
         CovalentLayoutModule,
@@ -81,11 +91,13 @@ export const firebaseConfig = {
     ],
     providers: [
         appRoutingProviders,
-        AuthService
+        AuthService,
+        {provide: MD_DIALOG_DATA, useValue: {} }
     ],
     bootstrap: [AppComponent],
     entryComponents: [
-        CollaboratorFormPopupComponent
+        CollaboratorFormPopupComponent,
+        TimesheetComponent
     ]
 } )
 export class AppModule { }

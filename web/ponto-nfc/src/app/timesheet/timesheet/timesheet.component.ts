@@ -1,28 +1,26 @@
-import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { TdDialogService } from '@covalent/core';
-
-import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AuthService } from './../../controls/auth.service';
+import { TimeRecord } from './../../entity/timerecord.model';
+import { Month } from './../../entity/month.model';
 import { User } from 'firebase/app';
-
-import { AuthService } from './../controls/auth.service';
-
-import { Collaborator } from './../entity/collaborator.model';
-import { Month } from './../entity/month.model';
-import { TimeRecord } from './../entity/timerecord.model';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { Component, OnInit, Input, Inject } from '@angular/core';
+import { MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
 
 @Component( {
-    moduleId: "module.id",
-    selector: 'timesheet-component',
-    templateUrl: 'timesheet.component.html'
+    selector: 'timesheet',
+    templateUrl: 'timesheet.component.html',
+    styleUrls: ['timesheet.component.css']
 } )
 
 export class TimesheetComponent implements OnInit
 {
-    private readonly collaboratorsTableName = "collaborators";
+    @Input("collaborator") collaborator;
 
+    @Input("admin") admin: boolean;
+
+    private readonly collaboratorsTableName = "collaborators";
+    
     private readonly timesheetTableName = "timesheet"; 
 
     private loggedUser: User;
@@ -50,58 +48,29 @@ export class TimesheetComponent implements OnInit
 
     private monthRecordsByDay: Array<{dia:number, timeRecords: Array<TimeRecord>}>;
 
-    private collaborator: Collaborator;
-
     private biggerMonths = [1, 3, 5, 7, 8, 10, 12];
 
     constructor(
-        private afAuth: AngularFireAuth,
         private afDatabase: AngularFireDatabase,
-        private router: Router,
         private authService: AuthService,
-        private dialogService: TdDialogService
-    ) { }
-
-    ngOnInit()
-    {
-        this.afAuth.auth.onAuthStateChanged(( loggedUser ) =>
+        private router: Router,
+        private snackbar: MdSnackBar,
+        @Inject(MD_DIALOG_DATA) data: any
+    ) 
+    { 
+        if(data != null && data.collaborator != null)
         {
-            if ( loggedUser == null || loggedUser == undefined )
-            {
-                this.router.navigate( ["/authentication"] );
-            }
-            else
-            {
-                this.authService.setLoggedUser( loggedUser );
-                this.loggedUser = this.authService.getLoggedUser();
-                this.initializeColaborator();
-            }
-        } );
+            this.collaborator = data.collaborator;
+            this.admin = true;
+        }
     }
 
-    private initializeColaborator(): void
+    ngOnInit() 
     {
-        this.afDatabase.list( this.collaboratorsTableName, {
-            query: {
-                orderByChild: "email",
-                equalTo: this.loggedUser.email
-            }
-        } ).subscribe(( result ) =>
-        {
-            if ( result != null && result.length > 0 )
-            {
-                this.collaborator = result[0];
-                this.authService.setLoggedCollaborator(this.collaborator);
-                this.initializeColaboratorTimeSheet();
-            }
-            else
-            {
-                alert( "Colaborador não encontrado, por favor faça login novamente!" );
-                this.authService.setLoggedUser( null );
-                this.router.navigate( ["authentication"] );
-            }
-        } );
+        this.initializeColaboratorTimeSheet();
     }
+
+    
 
     private initializeColaboratorTimeSheet()
     {
@@ -211,22 +180,52 @@ export class TimesheetComponent implements OnInit
             +(date.getSeconds() < 10 ? "0"+date.getSeconds() : date.getSeconds());
     }
 
-    public editNickname()
+    saveTimeRecord(timerecord, input)
     {
-        this.dialogService.openPrompt({
-            message: 'Esse apelido é exibido na sua saudação',
-            disableClose: false,
-            title: 'Apelido', 
-            value: this.collaborator.nickname,
-            cancelButton: 'Cancelar', 
-            acceptButton: 'Ok', 
-        }).afterClosed().subscribe( ( newNickName: string ) => {
-            if ( newNickName ) {
-                this.collaborator.nickname = newNickName;
+        let value = input.value;
 
-                this.afDatabase.object(this.collaboratorsTableName + "/" + this.collaborator.$key)
-                .update(this.collaborator);
-            }
-        });
+        if(value.indexOf(":") == -1)
+        {
+            this.snackbar.open("Por favor preencha no seguinte formato HH:mm ", null, {duration: 2000});
+            return;
         }
+
+        if( isNaN( value.split(":")[0] ) || isNaN( value.split(":")[1] ) )
+        {
+            this.snackbar.open("Horário inválido1231", null, {duration: 2000});
+            return;
+        }
+
+        let hour = +value.split(":")[0];
+        let minute = +value.split(":")[1];
+
+        timerecord.date.setHours(hour);
+        timerecord.date.setMinutes(minute);
+
+        if ( Object.prototype.toString.call(timerecord.date) === "[object Date]" ) 
+        {
+            // it is a date
+            if ( isNaN( timerecord.date.getTime() ) ) 
+            {  
+                //date is not valid
+                this.snackbar.open("Horário inválido1231", null, {duration: 2000});
+                return
+            }
+            else 
+            {
+                // date is valid
+                this.afDatabase.object("/timesheet/"+this.collaborator.$key+"/"+timerecord.$key)
+                .set({date: timerecord.date.getTime()})
+                .then( () => {
+                    this.snackbar.open("Registro alterado com sucesso", null, {duration: 2000});
+                });
+            }
+        }
+        else 
+        {
+            this.snackbar.open("Horário inválido", null, {duration: 2000});
+            return
+        }
+    }
+
 }
