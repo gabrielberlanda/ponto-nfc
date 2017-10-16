@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './app/auth/auth.component';
 import { HomeComponent } from './app/home/home.component';
 import { AdminComponent } from './app/admin/admin.component';
-import { TimesheetComponent } from './app/timesheet/timesheet.component';
+import { UserHomeComponent } from './app/timesheet/user-home.component';
 
 const routes: Routes = [
     {
@@ -19,7 +19,7 @@ const routes: Routes = [
             },
             {
                 path: 'timesheet',
-                component: TimesheetComponent
+                component: UserHomeComponent
             },
             {
                 path: 'admin',

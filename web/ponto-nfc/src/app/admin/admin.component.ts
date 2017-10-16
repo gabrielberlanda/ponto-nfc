@@ -1,3 +1,4 @@
+import { TimesheetComponent } from './../timesheet/timesheet/timesheet.component';
 import { CollaboratorFormPopupComponent } from './collaborator-form-popup/collaborator-form-popup.component';
 import { Collaborator } from './../entity/collaborator.model';
 import { AngularFireDatabase } from 'angularfire2/database';
@@ -12,6 +13,7 @@ import { MdDialog } from '@angular/material';
 
 export class AdminComponent implements OnInit {
     private collaborators: Array<Collaborator> = [];
+
     constructor(
         private afDatabase: AngularFireDatabase,
         private dialog: MdDialog
@@ -51,7 +53,11 @@ export class AdminComponent implements OnInit {
 
     collaboratorTimesheet(collaborator)
     {
-        
+        this.dialog.open(TimesheetComponent, {
+            data:{
+                collaborator: collaborator
+            }
+        });
     }
 
 }
