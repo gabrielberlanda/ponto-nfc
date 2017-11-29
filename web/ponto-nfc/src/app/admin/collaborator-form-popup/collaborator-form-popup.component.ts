@@ -67,6 +67,8 @@ export class CollaboratorFormPopupComponent implements OnInit
             this.collaborator.nickname = this.collaborator.name.split(" ")[0];
             this.collaborator.active = true;
 
+            delete(this.collaborator.$key);
+
             this.afDatabase.list("collaborators")
             .push(this.collaborator);
         }
